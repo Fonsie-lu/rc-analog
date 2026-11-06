@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-RC-21 (vendor Fonsie Audio) is an analog colour effect plugin modelled on the concept of XLN Audio's RC-20 Retro Color: six modules (Noise, Wobble, Distort, Digital, Space, Loss), each with a big knob and a Flux control, a global Magnitude, and a master section. It exports CLAP and VST3 and is built on nih-plug with a custom-painted nih_plug_egui editor (egui 0.31). The structure, conventions and look follow the sibling synth `~/tools/double-slit`. `README.md` describes the modules and the signal flow. The repository is `Fonsie-lu/rc-20` (directory `rc-20-clone`). The product carries no XLN logo or branding, and its DSP, noise generators and presets are original.
+RC-Analog (vendor Fonsie Audio) is an analog colour effect plugin modelled on the concept of XLN Audio's RC-20 Retro Color: six modules (Noise, Wobble, Distort, Digital, Space, Loss), each with a big knob and a Flux control, a global Magnitude, and a master section. It exports CLAP and VST3 and is built on nih-plug with a custom-painted nih_plug_egui editor (egui 0.31). The structure, conventions and look follow the sibling synth `~/tools/double-slit`. `README.md` describes the modules and the signal flow. The repository is `Fonsie-lu/rc-20` (directory `rc-20-clone`). The product carries no XLN logo or branding, and its DSP, noise generators and presets are original.
 
 ## Commands
 
@@ -13,16 +13,16 @@ cargo test --lib editor::tests::focus        # editor tests by name filter
 cargo clippy --all-targets                   # must stay warning-free
 cargo run --release --example bench          # CPU cost per case, % of one core
 
-cargo xtask bundle rc_21 --release         # -> target/bundled/RC-21.{clap,vst3}
+cargo xtask bundle rc_analog --release     # -> target/bundled/RC-Analog.{clap,vst3}
 ./install.sh                                 # build, symlink into ~/.clap and ~/.vst3 (--help)
 
 cargo run --release --example gui_preview    # editor without a host
-RC21_DEMO=1 RC21_PRESET=4 RC21_THEME=0..3 cargo run --release --example gui_preview
+RC_ANALOG_DEMO=1 RC_ANALOG_PRESET=4 RC_ANALOG_THEME=0..3 cargo run --release --example gui_preview
 ```
 
-`cargo xtask` is an alias in `.cargo/config.toml`. `vendor/vst3-com` patches nih-plug's `vst3-com` (one macro semicolon) through `[patch]` in `Cargo.toml`. `[profile.test]` uses opt-level 2 because the tests render seconds of audio. There is no nih-plug standalone (no ALSA/JACK headers). Use `gui_preview` for the GUI: with `RC21_DEMO=1` the engine processes a kick + chord test signal in a thread with no audio output, so the meters and activity strips move. Use the tests and the bench for audio.
+`cargo xtask` is an alias in `.cargo/config.toml`. `vendor/vst3-com` patches nih-plug's `vst3-com` (one macro semicolon) through `[patch]` in `Cargo.toml`. `[profile.test]` uses opt-level 2 because the tests render seconds of audio. There is no nih-plug standalone (no ALSA/JACK headers). Use `gui_preview` for the GUI: with `RC_ANALOG_DEMO=1` the engine processes a kick + chord test signal in a thread with no audio output, so the meters and activity strips move. Use the tests and the bench for audio.
 
-Screenshot workflow: `(RC21_DEMO=1 timeout 9 ./target/release/examples/gui_preview &)`, wait ~5 s, `import -window "RC-21 Preview" out.png`, then Read the PNG. The window comes out at about 2x scale, so crop or resize with `magick`.
+Screenshot workflow: `(RC_ANALOG_DEMO=1 timeout 9 ./target/release/examples/gui_preview &)`, wait ~5 s, `import -window "RC-Analog Preview" out.png`, then Read the PNG. The window comes out at about 2x scale, so crop or resize with `magick`.
 
 ## Architecture
 
@@ -50,7 +50,7 @@ Every module has the same shape: `prepare(sr)` (allocates), `reset()`, `set(&par
 
 `dsp/shared.rs`: `Shared` holds the GUI feedback (peak meters as "max since the editor last read", which the editor clears with `Feedback::take`; per-module activity; the digital module's rate/bits; CPU) plus the preset name. The preset name is behind a `Mutex` that only the main thread and GUI touch. Host state saves the parameters, the editor size, the theme and `"preset-name"`.
 
-Presets (`dsp/presets.rs`): factory presets are overrides on the defaults, by `id_string`. The file format is `{"product":"rc-21","schema":1,"name","params":{id: value}}`; unknown IDs are ignored and missing ones take their defaults. User presets are files in `$XDG_DATA_HOME/rc-21/presets`, named by file stem. The editor's SAVE runs `zenity` on a helper thread (`save_dialog`, polled each frame). Editor tests never run zenity: they set `presets_dir` to a temp folder and fill `save_job` themselves.
+Presets (`dsp/presets.rs`): factory presets are overrides on the defaults, by `id_string`. The file format is `{"product":"rc-analog","schema":1,"name","params":{id: value}}`; unknown IDs are ignored and missing ones take their defaults. User presets are files in `$XDG_DATA_HOME/rc-analog/presets`, named by file stem. The editor's SAVE runs `zenity` on a helper thread (`save_dialog`, polled each frame). Editor tests never run zenity: they set `presets_dir` to a temp folder and fill `save_job` themselves.
 
 ### Editor (`src/editor/`)
 
@@ -66,4 +66,4 @@ The editor is painted on a fixed 1240×760 canvas (`BW`/`BH`) through `Cv` and s
 - No allocation, lock or libm `exp2`/`sin`/`tanh`/`powf` on the audio path. Use `fast_exp2`, `fast_sin01`, `fast_tanh`, `fast_pow`, `fast_db_to_gain`, `fast_tan_pi`, `one_pole_coeff` from `dsp/common.rs`. `tests/no_alloc.rs` renders every factory preset under nih-plug's aborting allocator.
 - Randomness is seeded (`Rng`, `Drift`), never taken from the clock, and `reset()` re-seeds, so repeat renders are bit-identical.
 - No vendor name or logo, and no XLN logo or branding, on the panel or in presets.
-- Compatibility keys never change: `CLAP_ID` (`ch.fonsie.rc-21`) and `VST3_CLASS_ID` in `lib.rs`, the parameter `id_string`s, choice orders (projects store the index; append new types at the end), and the preset JSON format.
+- Compatibility keys never change: `CLAP_ID` (`ch.fonsie.rc-analog`) and `VST3_CLASS_ID` in `lib.rs`, the parameter `id_string`s, choice orders (projects store the index; append new types at the end), and the preset JSON format.

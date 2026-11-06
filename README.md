@@ -1,4 +1,4 @@
-# RC-21
+# RC-Analog
 
 An analog colour effect for Linux, built with
 [nih-plug](https://github.com/robbert-vdh/nih-plug). Exports **CLAP** and **VST3**.
@@ -14,9 +14,9 @@ original. Nothing is sampled or copied.
 
 | Item         | Value                                                   |
 | ------------ | ------------------------------------------------------- |
-| Product name | RC-21                                                 |
+| Product name | RC-Analog                                               |
 | Vendor       | Fonsie Audio                                            |
-| CLAP id      | `ch.fonsie.rc-21`                                     |
+| CLAP id      | `ch.fonsie.rc-analog`                                   |
 | Features     | `audio-effect`, `stereo`, `mono`, `distortion`          |
 | I/O          | stereo in/out, or mono in/out                           |
 | Latency      | 23 samples (the distortion's 2x oversampler), fixed     |
@@ -64,7 +64,7 @@ Details:
 ## Building
 
 ```sh
-cargo xtask bundle rc_21 --release
+cargo xtask bundle rc_analog --release
 ./install.sh               # build, symlink into ~/.clap and ~/.vst3
 ./install.sh --copy        # copy instead of symlink
 ./install.sh --system      # copy to /usr/lib/clap and /usr/lib/vst3, via sudo
@@ -85,7 +85,7 @@ cargo test                                   # DSP, headless editor, allocation 
 cargo clippy --all-targets
 cargo run --release --example bench          # CPU per case, % of one core
 cargo run --release --example gui_preview    # editor in a window, no host
-RC21_DEMO=1 RC21_PRESET=4 RC21_THEME=3 cargo run --release --example gui_preview
+RC_ANALOG_DEMO=1 RC_ANALOG_PRESET=4 RC_ANALOG_THEME=3 cargo run --release --example gui_preview
 ```
 
 With every module on (Hall reverb), the chain costs about 1.5 % of one core
@@ -101,7 +101,7 @@ at 48 kHz on a Ryzen 5 PRO 3500U.
 - A module's power square toggles it. A switched-off module is hatched, and
   clicking the hatch switches it back on.
 - Header: preset browser (factory and user presets), SAVE (zenity dialog;
-  presets saved to `$XDG_DATA_HOME/rc-21/presets` show up in the list),
+  presets saved to `$XDG_DATA_HOME/rc-analog/presets` show up in the list),
   CPU, themes (Tokyo Night, Catppuccin, Dracula, Gruvbox; saved with the
   project).
 

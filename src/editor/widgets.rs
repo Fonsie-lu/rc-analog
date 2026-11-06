@@ -11,7 +11,7 @@ use std::f32::consts::PI;
 use super::theme::{Section, Theme};
 use super::{ControlInfo, ControlKind, EditorState, Pending, Popup, PENDING_TIMEOUT};
 use crate::dsp::params::{ParamId, NUM_PARAMS};
-use crate::params::Rc21Params;
+use crate::params::RcAnalogParams;
 
 /// Smallest text size in canvas pixels; smaller requests are raised to it.
 pub const MIN_FONT: f32 = 11.0;
@@ -63,7 +63,7 @@ pub struct G<'a, 'b> {
     pub pt: Painter,
     pub cv: Cv,
     pub set: &'a ParamSetter<'b>,
-    pub p: &'a Rc21Params,
+    pub p: &'a RcAnalogParams,
     pub st: &'a mut EditorState,
     pub th: &'static Theme,
     /// Accent of the section currently being drawn.

@@ -1,9 +1,9 @@
 //! Rough CPU cost of the effect chain, as a fraction of one core in real time.
 //!
 //!   cargo run --release --example bench
-use rc_21::dsp::engine::Engine;
-use rc_21::dsp::params::{defaults, Module, ParamId, NUM_PARAMS};
-use rc_21::dsp::shared::Shared;
+use rc_analog::dsp::engine::Engine;
+use rc_analog::dsp::params::{defaults, Module, ParamId, NUM_PARAMS};
+use rc_analog::dsp::shared::Shared;
 use std::sync::Arc;
 use std::time::Instant;
 

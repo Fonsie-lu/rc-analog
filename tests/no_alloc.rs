@@ -3,10 +3,10 @@
 //! changes, transport stops and a reset in between.
 
 use assert_no_alloc::assert_no_alloc;
-use rc_21::dsp::engine::Engine;
-use rc_21::dsp::params::{Module, ParamId};
-use rc_21::dsp::presets::{factory_values, num_factory_presets};
-use rc_21::dsp::shared::Shared;
+use rc_analog::dsp::engine::Engine;
+use rc_analog::dsp::params::{Module, ParamId};
+use rc_analog::dsp::presets::{factory_values, num_factory_presets};
+use rc_analog::dsp::shared::Shared;
 use std::sync::Arc;
 
 // nih-plug's `assert_process_allocs` feature already installs the checking

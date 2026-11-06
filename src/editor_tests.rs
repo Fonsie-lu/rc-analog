@@ -65,7 +65,7 @@ impl GuiContext for MockHost {
 
 struct Harness {
     ctx: egui::Context,
-    params: Rc21Params,
+    params: RcAnalogParams,
     host: MockHost,
     state: EditorState,
     time: f64,
@@ -80,7 +80,7 @@ struct Harness {
 fn scratch_dir(tag: &str) -> PathBuf {
     static NEXT: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
     let n = NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-    let dir = std::env::temp_dir().join(format!("rc21-editor-{}-{tag}-{n}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("rc-analog-editor-{}-{tag}-{n}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     dir
 }
@@ -98,7 +98,7 @@ impl Harness {
         state.user_presets.clear();
         let mut h = Self {
             ctx,
-            params: Rc21Params::new(shared),
+            params: RcAnalogParams::new(shared),
             host,
             state,
             time: 0.0,
