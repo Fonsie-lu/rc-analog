@@ -1,5 +1,5 @@
 #!/bin/sh
-# Build the Entropy release bundles and install them into the CLAP and VST3 folders.
+# Build the RC-21 release bundles and install them into the CLAP and VST3 folders.
 #
 #   ./install.sh               build, then symlink into ~/.clap and ~/.vst3, so later
 #                              rebuilds need no reinstall
@@ -14,8 +14,8 @@
 set -eu
 cd "$(dirname "$0")"
 
-NAME="Entropy"
-PACKAGE=entropy
+NAME="RC-21"
+PACKAGE=rc_21
 BUNDLED=target/bundled
 TARGET_CPU=${TARGET_CPU-x86-64-v3}
 

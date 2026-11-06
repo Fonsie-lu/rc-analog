@@ -579,19 +579,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "entropy"
-version = "0.1.0"
-dependencies = [
- "assert_no_alloc",
- "atomic_float",
- "baseview",
- "egui-baseview",
- "nih_plug",
- "nih_plug_egui",
- "serde_json",
-]
-
-[[package]]
 name = "epaint"
 version = "0.31.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1577,6 +1564,19 @@ name = "raw-window-handle"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
+
+[[package]]
+name = "rc_21"
+version = "0.1.0"
+dependencies = [
+ "assert_no_alloc",
+ "atomic_float",
+ "baseview",
+ "egui-baseview",
+ "nih_plug",
+ "nih_plug_egui",
+ "serde_json",
+]
 
 [[package]]
 name = "redox_syscall"

@@ -25,7 +25,7 @@ use std::sync::{Arc, Mutex};
 use crate::dsp::params::{ParamId, NUM_PARAMS};
 use crate::dsp::presets::{self, factory_values, num_factory_presets, UserPreset, FACTORY};
 use crate::dsp::shared::Shared;
-use crate::params::EntropyParams;
+use crate::params::Rc21Params;
 use theme::{Theme, THEMES};
 pub use widgets::{Cv, G};
 
@@ -138,7 +138,7 @@ impl EditorState {
     }
 }
 
-pub fn create(params: Arc<EntropyParams>, shared: Arc<Shared>) -> Option<Box<dyn Editor>> {
+pub fn create(params: Arc<Rc21Params>, shared: Arc<Shared>) -> Option<Box<dyn Editor>> {
     create_egui_editor(
         params.editor_state.clone(),
         EditorState::new(shared),
@@ -162,15 +162,15 @@ pub fn setup_style(ctx: &egui::Context) {
     ctx.set_fonts(fonts);
 }
 
-pub fn root(ctx: &egui::Context, params: &EntropyParams, setter: &ParamSetter, state: &mut EditorState) {
+pub fn root(ctx: &egui::Context, params: &Rc21Params, setter: &ParamSetter, state: &mut EditorState) {
     // Meters and activity strips animate without any input.
     ctx.request_repaint();
-    ResizableWindow::new("entropy")
+    ResizableWindow::new("rc-21")
         .min_size(vec2(BW * 0.5, BH * 0.5))
         .show(ctx, params.editor_state.as_ref(), |ui| draw(ui, params, setter, state));
 }
 
-fn draw(ui: &mut Ui, p: &EntropyParams, set: &ParamSetter, st: &mut EditorState) {
+fn draw(ui: &mut Ui, p: &Rc21Params, set: &ParamSetter, st: &mut EditorState) {
     let full = ui.max_rect();
     let s = (full.width() / BW).min(full.height() / BH);
     let o = pos2(full.center().x - BW * s * 0.5, full.center().y - BH * s * 0.5);
@@ -229,7 +229,7 @@ fn save_dialog(suggested: PathBuf) -> FileJob {
             .arg("--save")
             .arg("--confirm-overwrite")
             .arg(format!("--filename={}", suggested.display()))
-            .arg("--file-filter=Entropy presets | *.json")
+            .arg("--file-filter=RC-21 presets | *.json")
             .output();
         let result = match result {
             Ok(o) if o.status.success() => Ok(String::from_utf8_lossy(&o.stdout).trim().to_owned()),
@@ -255,8 +255,8 @@ impl G<'_, '_> {
 
     fn header(&mut self) {
         let cv = self.cv;
-        self.text(cv.p(18.0, 22.0), Align2::LEFT_CENTER, "ENTROPY", 20.0, self.th.text);
-        let w = self.text_w("ENTROPY", 20.0);
+        self.text(cv.p(18.0, 22.0), Align2::LEFT_CENTER, "RC-21", 20.0, self.th.text);
+        let w = self.text_w("RC-21", 20.0);
         self.text(cv.p(28.0 + w, 23.0), Align2::LEFT_CENTER, "ANALOG COLOUR", 11.0, self.th.header);
         self.poll_save_job();
         self.preset_browser();

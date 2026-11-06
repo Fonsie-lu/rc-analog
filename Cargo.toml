@@ -1,10 +1,10 @@
 [package]
-name = "entropy"
+name = "rc_21"
 version = "0.1.0"
 edition = "2021"
 authors = ["Beat Weber <beat.weber@bithawk.ch>"]
 license = "GPL-3.0-or-later"
-description = "Entropy - an analog colour effect: noise, wobble, distortion, digital crunch, space and tape loss"
+description = "RC-21 - an analog colour effect: noise, wobble, distortion, digital crunch, space and tape loss"
 
 [workspace]
 members = ["xtask"]

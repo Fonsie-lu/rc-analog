@@ -1,4 +1,4 @@
-//! Entropy - an analog colour effect (CLAP and VST3): noise, wobble,
+//! RC-21 - an analog colour effect (CLAP and VST3): noise, wobble,
 //! distortion, digital crunch, space and tape loss in one chain.
 //!
 //! Two layers with a hard boundary: [`dsp`] holds all DSP and state and knows
@@ -18,10 +18,10 @@ pub mod params;
 
 use dsp::engine::{Engine, LATENCY};
 use dsp::shared::Shared;
-use params::EntropyParams;
+use params::Rc21Params;
 
-pub struct Entropy {
-    params: Arc<EntropyParams>,
+pub struct Rc21 {
+    params: Arc<Rc21Params>,
     shared: Arc<Shared>,
     engine: Engine,
     sample_rate: f32,
@@ -29,11 +29,11 @@ pub struct Entropy {
     mono_scratch: Vec<f32>,
 }
 
-impl Default for Entropy {
+impl Default for Rc21 {
     fn default() -> Self {
         let shared = Arc::new(Shared::default());
         Self {
-            params: Arc::new(EntropyParams::new(shared.clone())),
+            params: Arc::new(Rc21Params::new(shared.clone())),
             engine: Engine::new(shared.clone()),
             shared,
             sample_rate: 48_000.0,
@@ -42,10 +42,10 @@ impl Default for Entropy {
     }
 }
 
-impl Plugin for Entropy {
-    const NAME: &'static str = "Entropy";
+impl Plugin for Rc21 {
+    const NAME: &'static str = "RC-21";
     const VENDOR: &'static str = "Fonsie Audio";
-    const URL: &'static str = "https://example.com/entropy";
+    const URL: &'static str = "https://github.com/Fonsie-lu/rc-20";
     const EMAIL: &'static str = "beat.weber@bithawk.ch";
     const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
@@ -137,8 +137,8 @@ impl Plugin for Entropy {
     }
 }
 
-impl ClapPlugin for Entropy {
-    const CLAP_ID: &'static str = "ch.fonsie.entropy";
+impl ClapPlugin for Rc21 {
+    const CLAP_ID: &'static str = "ch.fonsie.rc-21";
     const CLAP_DESCRIPTION: Option<&'static str> =
         Some("Analog colour: noise, wobble, distortion, digital crunch, space and tape loss");
     const CLAP_MANUAL_URL: Option<&'static str> = None;
@@ -147,11 +147,11 @@ impl ClapPlugin for Entropy {
         &[ClapFeature::AudioEffect, ClapFeature::Stereo, ClapFeature::Mono, ClapFeature::Distortion];
 }
 
-impl Vst3Plugin for Entropy {
-    const VST3_CLASS_ID: [u8; 16] = *b"FonsieEntropyFx1";
+impl Vst3Plugin for Rc21 {
+    const VST3_CLASS_ID: [u8; 16] = *b"FonsieRC21Effect";
     const VST3_SUBCATEGORIES: &'static [Vst3SubCategory] =
         &[Vst3SubCategory::Fx, Vst3SubCategory::Distortion, Vst3SubCategory::Stereo];
 }
 
-nih_export_clap!(Entropy);
-nih_export_vst3!(Entropy);
+nih_export_clap!(Rc21);
+nih_export_vst3!(Rc21);

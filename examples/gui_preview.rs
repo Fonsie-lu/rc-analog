@@ -2,21 +2,21 @@
 //! changes go into a local store so every control can be operated and checked.
 //!
 //!   cargo run --release --example gui_preview
-//!   ENTROPY_THEME=0..3                    starts with a theme
-//!   ENTROPY_PRESET=n                      starts with factory preset n loaded
+//!   RC21_THEME=0..3                    starts with a theme
+//!   RC21_PRESET=n                      starts with factory preset n loaded
 //!
-//! With `ENTROPY_DEMO=1` the engine processes a test signal (a drum-like
+//! With `RC21_DEMO=1` the engine processes a test signal (a drum-like
 //! pulse and a chord) in a background thread at real-time pace (no audio
 //! output), following every edit made in the window, so the meters and the
 //! module activity strips can be checked.
 use baseview::{Size, WindowOpenOptions, WindowScalePolicy};
 use egui_baseview::{EguiWindow, GraphicsConfig};
-use entropy::dsp::engine::Engine;
-use entropy::dsp::params::{ParamId, NUM_PARAMS};
-use entropy::dsp::presets::{factory_values, FACTORY};
-use entropy::dsp::shared::Shared;
-use entropy::editor::{self, EditorState, PreviewStore};
-use entropy::params::EntropyParams;
+use rc_21::dsp::engine::Engine;
+use rc_21::dsp::params::{ParamId, NUM_PARAMS};
+use rc_21::dsp::presets::{factory_values, FACTORY};
+use rc_21::dsp::shared::Shared;
+use rc_21::editor::{self, EditorState, PreviewStore};
+use rc_21::params::Rc21Params;
 use nih_plug::prelude::*;
 use nih_plug::wrapper::state::PluginState;
 use std::sync::Arc;
@@ -46,12 +46,12 @@ impl GuiContext for PreviewContext {
 
 fn main() {
     let shared = Arc::new(Shared::default());
-    let params = Arc::new(EntropyParams::new(shared.clone()));
-    if let Some(i) = std::env::var("ENTROPY_THEME").ok().and_then(|v| v.parse().ok()) {
+    let params = Arc::new(Rc21Params::new(shared.clone()));
+    if let Some(i) = std::env::var("RC21_THEME").ok().and_then(|v| v.parse().ok()) {
         params.theme.store(i, std::sync::atomic::Ordering::Relaxed);
     }
     let store = PreviewStore::default();
-    let preset: Option<usize> = std::env::var("ENTROPY_PRESET").ok().and_then(|v| v.parse().ok());
+    let preset: Option<usize> = std::env::var("RC21_PRESET").ok().and_then(|v| v.parse().ok());
     if let Some((i, values)) = preset.and_then(|i| factory_values(i).map(|v| (i, v))) {
         let mut store = store.lock().unwrap();
         for id in ParamId::all() {
@@ -59,12 +59,12 @@ fn main() {
         }
         shared.set_preset_name(FACTORY[i].name);
     }
-    if std::env::var("ENTROPY_DEMO").is_ok() {
+    if std::env::var("RC21_DEMO").is_ok() {
         let (shared, params, store) = (shared.clone(), params.clone(), store.clone());
         std::thread::spawn(move || demo(shared, params, store));
     }
     let settings = WindowOpenOptions {
-        title: "Entropy Preview".into(),
+        title: "RC-21 Preview".into(),
         size: Size::new(editor::WIDTH as f64, editor::HEIGHT as f64),
         scale: WindowScalePolicy::ScaleFactor(1.0),
         gl_config: Some(Default::default()),
@@ -84,7 +84,7 @@ fn main() {
 
 /// Processes a test signal with the window's current values at real-time
 /// pace and publishes what the plugin would publish.
-fn demo(shared: Arc<Shared>, params: Arc<EntropyParams>, store: PreviewStore) {
+fn demo(shared: Arc<Shared>, params: Arc<Rc21Params>, store: PreviewStore) {
     const SR: f32 = 48_000.0;
     const BLOCK: usize = 256;
     let mut engine = Engine::new(shared);

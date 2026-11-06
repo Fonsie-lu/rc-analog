@@ -1,11 +1,11 @@
 //! Presets: the factory list (built in code as overrides on the defaults),
 //! the preset file format and the user preset folder.
 //!
-//! A preset file is JSON: `{"product": "entropy", "schema": 1, "name": ...,
+//! A preset file is JSON: `{"product": "rc-21", "schema": 1, "name": ...,
 //! "params": {"<id_string>": value, ...}}` with values in natural units.
 //! Unknown IDs are ignored and missing ones take their defaults, so presets
 //! survive parameters being added. User presets are the `.json` files in
-//! `$XDG_DATA_HOME/entropy/presets`; a preset's name is its file stem.
+//! `$XDG_DATA_HOME/rc-21/presets`; a preset's name is its file stem.
 
 use std::path::{Path, PathBuf};
 
@@ -13,7 +13,7 @@ use serde_json::{json, Map, Value};
 
 use super::params::{defaults, ParamId, NUM_PARAMS};
 
-pub const PRODUCT: &str = "entropy";
+pub const PRODUCT: &str = "rc-21";
 pub const SCHEMA: u64 = 1;
 
 pub struct FactoryPreset {
@@ -355,7 +355,7 @@ pub struct UserPreset {
     pub path: PathBuf,
 }
 
-/// `$XDG_DATA_HOME/entropy/presets`, or `~/.local/share/entropy/presets`.
+/// `$XDG_DATA_HOME/rc-21/presets`, or `~/.local/share/rc-21/presets`.
 pub fn user_dir() -> PathBuf {
     let base = std::env::var_os("XDG_DATA_HOME")
         .map(PathBuf::from)
@@ -432,7 +432,7 @@ mod tests {
         assert_eq!(name, "Worn");
         assert_eq!(back, v);
 
-        let text = r#"{"product":"entropy","schema":1,"name":"x","params":{"wobble.amount":0.7,"future.knob":3}}"#;
+        let text = r#"{"product":"rc-21","schema":1,"name":"x","params":{"wobble.amount":0.7,"future.knob":3}}"#;
         let (_, v) = from_json(text).unwrap();
         assert_eq!(v[ParamId::WobbleAmount.index()], 0.7);
         assert_eq!(v[ParamId::NoiseAmount.index()], defaults()[ParamId::NoiseAmount.index()]);
@@ -442,7 +442,7 @@ mod tests {
 
     #[test]
     fn user_presets_save_list_and_load() {
-        let dir = std::env::temp_dir().join(format!("entropy-presets-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("rc21-presets-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         assert!(list_user(&dir).is_empty());
         let v = factory_values(7).unwrap();

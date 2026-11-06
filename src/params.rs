@@ -123,7 +123,7 @@ fn parse_value(d: &ParamDesc, s: &str) -> Option<f32> {
     Some(d.clamp(v))
 }
 
-pub struct EntropyParams {
+pub struct Rc21Params {
     pub editor_state: Arc<EguiState>,
     /// Selected GUI colour scheme, an index into `editor::theme::THEMES`.
     /// Persisted with the project but not automatable.
@@ -134,7 +134,7 @@ pub struct EntropyParams {
     shared: Arc<Shared>,
 }
 
-impl EntropyParams {
+impl Rc21Params {
     pub fn new(shared: Arc<Shared>) -> Self {
         Self {
             editor_state: EguiState::from_size(crate::editor::WIDTH, crate::editor::HEIGHT),
@@ -159,7 +159,7 @@ impl EntropyParams {
     }
 }
 
-unsafe impl Params for EntropyParams {
+unsafe impl Params for Rc21Params {
     fn param_map(&self) -> Vec<(String, ParamPtr, String)> {
         // Grouped by module so hosts show "Wobble / Depth" rather than one flat list.
         descs()
