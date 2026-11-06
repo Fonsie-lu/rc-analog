@@ -45,7 +45,7 @@ impl Default for RcAnalog {
 impl Plugin for RcAnalog {
     const NAME: &'static str = "RC-Analog";
     const VENDOR: &'static str = "Fonsie Audio";
-    const URL: &'static str = "https://github.com/Fonsie-lu/rc-20";
+    const URL: &'static str = "https://github.com/Fonsie-lu/rc-analog";
     const EMAIL: &'static str = "beat.weber@bithawk.ch";
     const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 

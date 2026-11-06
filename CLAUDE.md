@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-RC-Analog (vendor Fonsie Audio) is an analog colour effect plugin modelled on the concept of XLN Audio's RC-20 Retro Color: six modules (Noise, Wobble, Distort, Digital, Space, Loss), each with a big knob and a Flux control, a global Magnitude, and a master section. It exports CLAP and VST3 and is built on nih-plug with a custom-painted nih_plug_egui editor (egui 0.31). The structure, conventions and look follow the sibling synth `~/tools/double-slit`. `README.md` describes the modules and the signal flow. The repository is `Fonsie-lu/rc-20` (directory `rc-20-clone`). The product carries no XLN logo or branding, and its DSP, noise generators and presets are original.
+RC-Analog (vendor Fonsie Audio) is an analog colour effect plugin modelled on the concept of XLN Audio's RC-20 Retro Color: six modules (Noise, Wobble, Distort, Digital, Space, Loss), each with a big knob and a Flux control, a global Magnitude, and a master section. It exports CLAP and VST3 and is built on nih-plug with a custom-painted nih_plug_egui editor (egui 0.31). The structure, conventions and look follow the sibling synth `~/tools/double-slit`. `README.md` describes the modules and the signal flow. The repository is `Fonsie-lu/rc-analog` (directory `rc-20-clone`). The product carries no XLN logo or branding, and its DSP, noise generators and presets are original.
 
 ## Commands
 
