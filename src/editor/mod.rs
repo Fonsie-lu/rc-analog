@@ -257,7 +257,7 @@ impl G<'_, '_> {
         let cv = self.cv;
         self.text(cv.p(18.0, 22.0), Align2::LEFT_CENTER, "RC-ANALOG", 20.0, self.th.text);
         let w = self.text_w("RC-ANALOG", 20.0);
-        self.text(cv.p(28.0 + w, 23.0), Align2::LEFT_CENTER, "ANALOG COLOUR", 11.0, self.th.header);
+        self.text(cv.p(28.0 + w, 23.0), Align2::LEFT_CENTER, "COLOUR EFFECT", 11.0, self.th.header);
         self.poll_save_job();
         self.preset_browser();
         let cpu = self.st.shared.feedback.cpu_load.load(Relaxed);
